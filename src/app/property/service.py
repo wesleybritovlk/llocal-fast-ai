@@ -5,6 +5,7 @@ from src.app.property.dto import Response, Request
 from decimal import Decimal
 from src.infra.llm.service import LLMService
 from src.infra.llm.template import PROPERTY_DESCRIPTION_TEMPLATE
+from src.infra.coordinate import get_coordinate
 
 class PropertyService:
     def __init__(self, repository: PropertyRepository):
@@ -23,6 +24,7 @@ class PropertyService:
 
     def create(self, user_id: str, request: Request.PropertyCreate):
         self.exists_user(user_id)
+        coordinate = get_coordinate(request.address_full)
         description = self.generate_description(request)
         entity = PropertyEntity(
             property_type=request.property_type.name,
@@ -33,8 +35,8 @@ class PropertyService:
             bathrooms=request.bathrooms,
             parking=request.parking,
             address_full=request.address_full,
-            coordinate_longitude=Decimal(0.0),
-            coordinate_latitude=Decimal(0.0),
+            coordinate_latitude=coordinate['latitude'],
+            coordinate_longitude=coordinate['longitude'],
             user_id=user_id
         )
         entity = self.repository.create(entity)
@@ -49,8 +51,8 @@ class PropertyService:
             parking=entity.parking,
             address_full=entity.address_full,
             coordinate=Response.Coordinate(
-                longitude=entity.coordinate_longitude,
-                latitude=entity.coordinate_latitude
+                latitude=entity.coordinate_latitude,
+                longitude=entity.coordinate_longitude
             )
         )
 
@@ -70,8 +72,8 @@ class PropertyService:
             parking=entity.parking,
             address_full=entity.address_full,
             coordinate=Response.Coordinate(
-                longitude=entity.coordinate_longitude,
-                latitude=entity.coordinate_latitude
+                latitude=entity.coordinate_latitude,
+                longitude=entity.coordinate_longitude
             )
         )
     
@@ -90,8 +92,8 @@ class PropertyService:
                 bathrooms=entity.bathrooms,
                 area=entity.area,
                 coordinate=Response.Coordinate(
-                    longitude=entity.coordinate_longitude,
-                    latitude=entity.coordinate_latitude
+                    latitude=entity.coordinate_latitude,
+                    longitude=entity.coordinate_longitude
                 )
             ) for entity in entities['data']
         ]
@@ -105,6 +107,7 @@ class PropertyService:
     def update(self, user_id: str, id: str, request: Request.PropertyUpdate):
         self.exists_user(user_id)
         self.exists_property(id, user_id)
+        coordinate = get_coordinate(request.address_full)
         description = self.generate_description(request)
         entity = PropertyEntity(
             id=id,
@@ -116,8 +119,8 @@ class PropertyService:
             bathrooms=request.bathrooms,
             parking=request.parking,
             address_full=request.address_full,
-            coordinate_longitude=Decimal(0.0),
-            coordinate_latitude=Decimal(0.0),
+            coordinate_latitude=coordinate['latitude'],
+            coordinate_longitude=coordinate['longitude'],
             user_id=user_id
         )
         updated_rows = self.repository.update(entity)
@@ -134,8 +137,8 @@ class PropertyService:
             parking=entity.parking,
             address_full=entity.address_full,
             coordinate=Response.Coordinate(
-                longitude=entity.coordinate_longitude,
-                latitude=entity.coordinate_latitude
+                latitude=entity.coordinate_latitude,
+                longitude=entity.coordinate_longitude
             ))
     
     def delete(self, user_id: str, id: str):
