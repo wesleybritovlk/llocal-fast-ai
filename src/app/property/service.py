@@ -3,15 +3,25 @@ from src.app.property.repository import PropertyRepository, get_property_reposit
 from src.app.property.entity import PropertyEntity
 from src.app.property.dto import Response, Request
 from decimal import Decimal
+from src.infra.llm.service import LLMService
+from src.infra.llm.template import PROPERTY_DESCRIPTION_TEMPLATE
 
 class PropertyService:
     def __init__(self, repository: PropertyRepository):
         self.repository = repository
+        self.llm_service = LLMService
+
+    def generate_description(self, 
+            property_data: Request.PropertyCreate | Request.PropertyUpdate):
+        prompt_template = PROPERTY_DESCRIPTION_TEMPLATE
+        context_data = property_data.dict()
+        return self.llm_service.agent_invoke(prompt_template, context_data)
 
     def create(self, user_id: str, request: Request.PropertyCreate):
+        description = self.generate_description(request)
         entity = PropertyEntity(
             property_type=request.property_type.name,
-            description='',
+            description=description,
             price=request.price,
             area=request.area,
             bedrooms=request.bedrooms,
