@@ -37,14 +37,14 @@ class CommonResource:
         return Data(data=data)
 
     @staticmethod
-    def to_page(page) -> Page[T]:
-        return Page(
-            data=page.data, 
-            current_page=page.current_page, 
-            page_size=page.page_size, 
-            total_pages=page.total_pages, 
-            total_elements=page.total_elements, 
-            is_first=page.is_first, 
-            is_last=page.is_last, 
-            empty=page.empty
+    def to_page(page_data: dict) -> Page[T]: 
+        return Page( 
+            data=page_data["data"], 
+            current_page=page_data["current_page"], 
+            page_size=page_data["page_size"], 
+            total_pages=page_data["total_pages"], 
+            total_elements=page_data["total_elements"], 
+            is_first=page_data["is_first"], 
+            is_last=page_data["is_last"], 
+            empty=page_data["empty"] 
         )
