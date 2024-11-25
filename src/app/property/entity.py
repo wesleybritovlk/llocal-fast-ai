@@ -2,7 +2,6 @@ from sqlalchemy import Column, UUID, Text, Enum as SQLEnum, Numeric, SmallIntege
 from sqlalchemy.schema import CreateSchema
 from src.infra.database import Base
 from uuid import uuid4
-from datetime import datetime
 from enum import Enum
 
 class PropertyType(str, Enum):

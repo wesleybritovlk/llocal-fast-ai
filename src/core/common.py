@@ -1,13 +1,13 @@
 from typing import TypeVar, Generic, List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 T = TypeVar('T')
 
 class Message(BaseModel):
-    message: str
+    message: str = Field(..., example="Message in response description")
 
 class MessageData(BaseModel, Generic[T]):
-    message: str
+    message: str = Field(..., example="Message in response description")
     data: T
 
 class Data(BaseModel, Generic[T]):

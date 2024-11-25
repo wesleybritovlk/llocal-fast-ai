@@ -12,6 +12,11 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(entity)
         return entity
+
+    def find_by_email(self, email: str):
+        return self.db.query(UserEntity).filter(
+            UserEntity.is_deleted == False, UserEntity.email == email
+        ).first()
     
     def find_all(self):
         return self.db.query(UserEntity).filter(

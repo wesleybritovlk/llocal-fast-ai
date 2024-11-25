@@ -1,7 +1,6 @@
 from sqlalchemy import Column, UUID, String, DateTime, Boolean, func, event
 from sqlalchemy.schema import CreateSchema
 from uuid import uuid4
-from datetime import datetime
 from src.infra.database import Base, engine
 
 class UserEntity(Base):
