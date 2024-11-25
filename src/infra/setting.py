@@ -9,4 +9,3 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     ALGORITHM: str
     GLOBAL_EXPIRATION: int
-
