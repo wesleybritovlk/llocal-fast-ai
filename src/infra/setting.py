@@ -5,6 +5,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str
     LLM_URL: str
+    LLM_MODEL: str
     JWT_SECRET_KEY: str
     ALGORITHM: str
     GLOBAL_EXPIRATION: int

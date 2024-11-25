@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from typing import Dict, Any
 from src.infra.setting import Settings
 
-llm = OllamaLLM(model="llama3.2:1b", temperature=0.2, verbose=False, base_url=Settings().LLM_URL)
+llm = OllamaLLM(model=Settings().LLM_MODEL, temperature=0.2, verbose=False, base_url=Settings().LLM_URL)
 
 class LLMService:
     @staticmethod
