@@ -4,6 +4,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     DATABASE_URL: str
+    LLM_URL: str
     JWT_SECRET_KEY: str
     ALGORITHM: str
     GLOBAL_EXPIRATION: int
+

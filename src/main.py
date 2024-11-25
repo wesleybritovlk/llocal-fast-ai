@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from src.infra.security import validate_access, bearer_scheme
 
 app = FastAPI(
@@ -27,3 +28,7 @@ def router_manager():
 
 entity_manager()
 router_manager()
+
+@app.get("/", include_in_schema=False) 
+def read_root(): 
+    return RedirectResponse(url="/docs") 
