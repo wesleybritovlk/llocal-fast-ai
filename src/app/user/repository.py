@@ -1,4 +1,5 @@
 from fastapi import Depends
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from src.infra.database import get_db
 from src.app.user.entity import UserEntity
@@ -13,16 +14,34 @@ class UserRepository:
         self.db.refresh(entity)
         return entity
 
+    def exists_user(self, entity: UserEntity):
+        return self.db.query(
+            self.db.query(UserEntity).filter(
+                UserEntity.is_deleted == False,
+                or_(
+                    UserEntity.email == entity.email, 
+                    UserEntity.cnpj == entity.cnpj, 
+                )
+            ).exists()
+        ).scalar() 
+    
+    def exists_user_not_id(self, entity: UserEntity):
+        return self.db.query(
+            self.db.query(UserEntity).filter(
+                UserEntity.is_deleted == False,
+                UserEntity.id != entity.id,
+                or_(
+                    UserEntity.email == entity.email, 
+                    UserEntity.cnpj == entity.cnpj, 
+                )
+            ).exists()
+        ).scalar()
+
     def find_by_email(self, email: str):
         return self.db.query(UserEntity).filter(
             UserEntity.is_deleted == False, UserEntity.email == email
         ).first()
-    
-    def find_all(self):
-        return self.db.query(UserEntity).filter(
-                UserEntity.is_deleted == False
-            ).all()
-    
+
     def find_by_id(self, id: str):
         return self.db.query(UserEntity).filter(
             UserEntity.is_deleted == False, UserEntity.id == id

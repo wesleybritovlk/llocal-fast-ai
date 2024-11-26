@@ -15,6 +15,9 @@ class UserService:
             email=request.email,
             password=request.password
         )
+        exists = self.repository.exists_user(entity)
+        if exists:
+            raise HTTPException(status_code=409, detail="User already registered")
         entity = self.repository.create(entity)
         return {
             "sub": str(entity.id),
@@ -29,7 +32,6 @@ class UserService:
         if not entity:
             raise HTTPException(status_code=404, detail="User not found")
         return Response.User(
-            id=str(entity.id),
             fantasy_name=entity.fantasy_name,
             cnpj=entity.cnpj,
             email=entity.email
@@ -42,6 +44,9 @@ class UserService:
             cnpj=request.cnpj,
             email=request.email
         )
+        exists = self.repository.exists_user_not_id(entity)
+        if exists:
+            raise HTTPException(status_code=409, detail="User data already registered")
         updated_rows = self.repository.update(entity)
         if updated_rows == 0:
             raise HTTPException(status_code=404, detail="User not found")
