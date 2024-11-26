@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from src.infra.security import validate_access, bearer_scheme
+from src.infra.security import bearer_scheme
 
 app = FastAPI(
     title="LLocal Fast AI",
